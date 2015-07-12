@@ -1,6 +1,6 @@
 /*
  * OpenGLSamples (openglsamples.sf.net) Examples
- * VC++ users should create a Win32 Console project and link 
+ * VC++ users should create a Win32 Console project and link
  * the program with glut32.lib, glu32.lib, opengl32.lib
  *
  * GLUT can be downloaded from http://www.xmission.com/~nate/glut.html
@@ -29,31 +29,31 @@ typedef struct {
 
 glutWindow win;
 
-void display() 
+void display()
 {
         printf("display()\n");
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear Screen and Depth Buffer
 	glLoadIdentity();
-	glTranslatef(0.0f,0.0f,height);			
- 
+	glTranslatef(0.0f,0.0f,height);
+
 	/*
 	 * Triangle code starts here
 	 * 3 verteces, 3 colors.
 	 */
-	glBegin(GL_TRIANGLES);					
-		glColor3f(0.0f,0.0f,1.0f);			
-		glVertex3f( 0.0f, 1.0f, 0.0f);		
-		glColor3f(0.0f,1.0f,0.0f);			
-		glVertex3f(-1.0f,-1.0f, 0.0f);		
-		glColor3f(1.0f,0.0f,0.0f);			
-		glVertex3f( 1.0f,-1.0f, 0.0f);		
-	glEnd();				
- 
+	glBegin(GL_TRIANGLES);
+		glColor3f(0.0f,0.0f,1.0f);
+		glVertex3f( 0.0f, 1.0f, 0.0f);
+		glColor3f(0.0f,1.0f,0.0f);
+		glVertex3f(-1.0f,-1.0f, 0.0f);
+		glColor3f(1.0f,0.0f,0.0f);
+		glVertex3f( 1.0f,-1.0f, 0.0f);
+	glEnd();
+
 	glutSwapBuffers();
 }
 
 
-void initialize () 
+void initialize ()
 {
     glMatrixMode(GL_PROJECTION);  // select projection matrix
     glViewport(0, 0, win.width, win.height); // set the viewport
@@ -61,27 +61,27 @@ void initialize ()
     glLoadIdentity();	// reset projection matrix
     GLfloat aspect = (GLfloat) win.width / win.height;
         // set up a perspective projection matrix
-	gluPerspective(win.field_of_view_angle, aspect, win.z_near, win.z_far);	
+	gluPerspective(win.field_of_view_angle, aspect, win.z_near, win.z_far);
     glMatrixMode(GL_MODELVIEW); // specify which matrix is the current matrix
     glShadeModel( GL_SMOOTH );
     glClearDepth( 1.0f );														// specify the clear value for the depth buffer
     glEnable( GL_DEPTH_TEST );
     glDepthFunc( GL_LEQUAL );
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST ); // specify implementation-specific hints
-    glClearColor(0.0, 0.0, 0.0, 1.0); // specify clear values for the color buffers								
+    glClearColor(0.0, 0.0, 0.0, 1.0); // specify clear values for the color buffers
 }
 
 
-void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )		
-{ 
-  switch ( key ) 
+void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
+{
+  switch ( key )
   {
-    case 107:        
-      height -= 0.5; 
+    case 107:
+      height -= 0.5;
       printf("in\n");
       break;
-    case 106:        
-      height += 0.5; 
+    case 106:
+      height += 0.5;
       printf("out\n");
       break;
     default:
@@ -93,7 +93,7 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY )
 void none() {
 }
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
 	// set window values
 	win.width = 640;
