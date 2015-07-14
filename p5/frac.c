@@ -13,14 +13,27 @@
 #include <math.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <stdlib.h>
+#include <time.h>
 
 float height = -3.0;
+int seed = 0;
+
+float sv = 1.0;
+float vx = 3.0;
+float vy = 3.0;
+float fric = 0.95;
+
 float angle1 = 34.0f;
 float angle2 = 34.0f;
 float color_angle = 0.0;
 int startx = 0;
 int starty = 0;
-int moving = 0;
+int mouse_down = 0;
+
+unsigned prob(float p) {
+  return ((float)rand() / RAND_MAX) < p;
+}
 
 typedef struct {
   int width;
@@ -66,19 +79,44 @@ static const GLfloat cubev[] = {
   1, 0, 0
 };
 
+static float face_colors[] = {
+  0.8, 0.4, 0.2,
+  0.2, 7.0, 0.4,
+  0.2, 0.3, 1.0,
+  0.2, 0.2, 0.3,
+  0.1, 0.9, 0.9,
+  0.3, 0.9, 0.2
+};
+
 void draw_square() {
 }
 
+
 void recur_cube(GLfloat x, GLfloat y, GLfloat z, float s, int depth) {
-  if (depth > 3) {
+  int die = 0;
+  if (depth > 2 && prob(0.03)) {
+    die = 1;
+  }
+
+  if (depth > 4 || die) {
     int i;
+    int face_color_index = 0;
     for (i=0; i<72; i+=12) {
-      color_angle += 0.001;
+      glColor3f(
+          face_colors[face_color_index+0],
+          face_colors[face_color_index+1],
+          face_colors[face_color_index+2]
+        );
+      face_color_index += 3;
+      face_color_index %= sizeof(face_colors) / sizeof(float);
+      /*
+      color_angle += 0.0001;
       glColor3f(
           fabs(sin(color_angle + 10)),
           fabs(sin(color_angle + 20)),
           fabs(sin(color_angle + 30))
       );
+      */
       glVertex3f(cubev[i+0]*s+x, cubev[i+1]*s+y, cubev[i+2]*s+z);
       glVertex3f(cubev[i+3]*s+x, cubev[i+4]*s+y, cubev[i+5]*s+z);
       glVertex3f(cubev[i+6]*s+x, cubev[i+7]*s+y, cubev[i+8]*s+z);
@@ -110,23 +148,22 @@ void recur_cube(GLfloat x, GLfloat y, GLfloat z, float s, int depth) {
 }
 
 void display() {
-  printf("display()\n");
+  srand(seed);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear Screen and Depth Buffer
   glLoadIdentity();
 
-  glTranslatef(0.0f,0.0f,height);
+  float c = 0.5;
+  glMatrixMode(GL_MODELVIEW);
+  glPushMatrix();
+    glTranslatef(0, 0, height);
+    glRotatef(angle1, 0.0, 1.0, 0.0);
+    glRotatef(angle2, 1.0, 0.0, 0.0);
+    glTranslatef(-0.5, -0.5, -0.5);
 
-  glRotatef(angle1, 0.0, 1.0, 0.0);
-  glRotatef(angle2, 1.0, 0.0, 0.0);
-
-  /*
-   * Triangle code starts here
-   * 3 verteces, 3 colors.
-   */
-
-  glBegin(GL_TRIANGLES);
-  recur_cube(0, 0, 0, 1.0, 0);
-  glEnd();
+    glBegin(GL_TRIANGLES);
+    recur_cube(0, 0, 0, 1.0, 1);
+    glEnd();
+  glPopMatrix();
 
   glutSwapBuffers();
 }
@@ -143,6 +180,13 @@ void initialize () {
   glShadeModel( GL_SMOOTH );
   glClearDepth( 1.0f ); // specify the clear value for the depth buffer
   glEnable( GL_DEPTH_TEST );
+  /*
+  glEnable( GL_LIGHTING );
+  glEnable( GL_LIGHT_MODEL_AMBIENT );
+  glEnable( GL_LIGHT0 );
+  GLfloat global_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+  glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
+  */
   glDepthFunc( GL_LEQUAL );
   glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST ); // specify implementation-specific hints
   glClearColor(0.0, 0.0, 0.0, 1.0); // specify clear values for the color buffers
@@ -165,22 +209,41 @@ void keyboard ( unsigned char key, int mousePositionX, int mousePositionY ) {
 static void mouse(int button, int state, int x, int y) {
   if (button == GLUT_LEFT_BUTTON) {
     if (state == GLUT_DOWN) {
-      moving = 1;
+      mouse_down = 1;
       startx = x;
       starty = y;
     }
     if (state == GLUT_UP) {
-      moving = 0;
+      mouse_down = 0;
+    }
+  }
+
+  else if ((button == 3) || (button == 4)) {
+    if (state == GLUT_UP) return;
+
+    //up
+    const float scroll_factor = 0.3;
+    if (button == 3) {
+      height += scroll_factor;
+    }
+    //down
+    else if (button == 4) {
+      height -= scroll_factor;
     }
   }
 }
 
 static void motion(int x, int y) {
-  if (moving) {
-    angle1 = angle1 + (x - startx);
-    angle2 = angle2 + (y - starty);
+  if (mouse_down) {
+    float dx = x-startx;
+    float dy = y-starty;
+
+    vx += dx * 0.01;
+    vy += dy * 0.01;
+
     startx = x;
     starty = y;
+
     glutPostRedisplay();
   }
 }
@@ -193,15 +256,22 @@ void inc_color(float delta) {
 }
 
 void idle() {
-  inc_color(0.01);
+  angle1 += vx;
+  angle2 += vy;
+
+  vx *= fric;
+  vy *= fric;
+  //inc_color(0.01);
   glutPostRedisplay();
 }
 
 int main(int argc, char **argv) {
-  win.width = 640;
-  win.height = 480;
+  seed = time(NULL);
+
+  win.width = 1920;
+  win.height = 1080;
   win.title = "OpenGL/GLUT Example. Visit http://openglsamples.sf.net ";
-  win.field_of_view_angle = 45;
+  win.field_of_view_angle = 25;
   win.z_near = 1.0f;
   win.z_far = 500.0f;
 
