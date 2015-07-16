@@ -1,3 +1,4 @@
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  --- mat.h ---
@@ -32,9 +33,7 @@ class mat2 {
 	{ _m[0] = a;  _m[1] = b;  }
 
     mat2( GLfloat m00, GLfloat m10, GLfloat m01, GLfloat m11 )
-	{ _m[0] = vec2( m00, m10 ); _m[1] = vec2( m01, m11 ); }
-        // old version
-	// { _m[0] = vec2( m00, m01 ); _m[1] = vec2( m10, m11 ); }
+	{ _m[0] = vec2( m00, m01 ); _m[1] = vec2( m10, m11 ); }
 
     mat2( const mat2& m ) {
 	if ( *this != m ) {
@@ -123,17 +122,10 @@ class mat2 {
 	    }
 	}
 
-        return 	*this = a;
+	return *this = a;
     }
 
     mat2& operator /= ( const GLfloat s ) {
-#ifdef DEBUG
-	if ( std::fabs(s) < DivideByZeroTolerance ) {
-	    std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
-		      << "Division by zero" << std::endl;
-	    return mat2();
-	}
-#endif // DEBUG
 
 	GLfloat r = GLfloat(1.0) / s;
 	return *this *= r;
@@ -181,8 +173,8 @@ mat2 matrixCompMult( const mat2& A, const mat2& B ) {
 
 inline
 mat2 transpose( const mat2& A ) {
-    return mat2( A[0][0], A[1][0],
-		 A[0][1], A[1][1] );
+    return mat2( A[0][0], A[0][1],
+		 A[1][0], A[1][1] );
 }
 
 //----------------------------------------------------------------------------
@@ -209,12 +201,9 @@ class mat3 {
 	  GLfloat m01, GLfloat m11, GLfloat m21,
 	  GLfloat m02, GLfloat m12, GLfloat m22 )
 	{
-	    _m[0] = vec3( m00, m10, m20 );
-	    _m[1] = vec3( m01, m11, m21 );
-	    _m[2] = vec3( m02, m12, m22 );
-	    // _m[0] = vec3( m00, m01, m02 );
-	    // _m[1] = vec3( m10, m11, m12 );
-	    // _m[2] = vec3( m20, m21, m22 );
+	    _m[0] = vec3( m00, m01, m02 );
+	    _m[1] = vec3( m10, m11, m12 );
+	    _m[2] = vec3( m20, m21, m22 );
 	}
 
     mat3( const mat3& m )
@@ -310,13 +299,7 @@ class mat3 {
     }
 
     mat3& operator /= ( const GLfloat s ) {
-#ifdef DEBUG
-	if ( std::fabs(s) < DivideByZeroTolerance ) {
-	    std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
-		      << "Division by zero" << std::endl;
-	    return mat3();
-	}
-#endif // DEBUG
+
 
 	GLfloat r = GLfloat(1.0) / s;
 	return *this *= r;
@@ -370,9 +353,9 @@ mat3 matrixCompMult( const mat3& A, const mat3& B ) {
 
 inline
 mat3 transpose( const mat3& A ) {
-    return mat3( A[0][0], A[1][0], A[2][0],
-		 A[0][1], A[1][1], A[2][1],
-		 A[0][2], A[1][2], A[2][2] );
+    return mat3( A[0][0], A[0][1], A[0][2],
+		 A[1][0], A[1][1], A[1][2],
+		 A[2][0], A[2][1], A[2][2] );
 }
 
 //----------------------------------------------------------------------------
@@ -400,14 +383,10 @@ class mat4 {
 	  GLfloat m02, GLfloat m12, GLfloat m22, GLfloat m32,
 	  GLfloat m03, GLfloat m13, GLfloat m23, GLfloat m33 )
 	{
-	    _m[0] = vec4( m00, m10, m20, m30 );
-	    _m[1] = vec4( m01, m11, m21, m31 );
-	    _m[2] = vec4( m02, m12, m22, m32 );
-	    _m[3] = vec4( m03, m13, m23, m33 );
-	    // _m[0] = vec4( m00, m01, m02, m03 );
-	    // _m[1] = vec4( m10, m11, m12, m13 );
-	    // _m[2] = vec4( m20, m21, m22, m23 );
-	    // _m[3] = vec4( m30, m31, m32, m33 );
+	    _m[0] = vec4( m00, m01, m02, m03 );
+	    _m[1] = vec4( m10, m11, m12, m13 );
+	    _m[2] = vec4( m20, m21, m22, m23 );
+	    _m[3] = vec4( m30, m31, m32, m33 );
 	}
 
     mat4( const mat4& m )
@@ -504,13 +483,7 @@ class mat4 {
     }
 
     mat4& operator /= ( const GLfloat s ) {
-#ifdef DEBUG
-	if ( std::fabs(s) < DivideByZeroTolerance ) {
-	    std::cerr << "[" << __FILE__ << ":" << __LINE__ << "] "
-		      << "Division by zero" << std::endl;
-	    return mat4();
-	}
-#endif // DEBUG
+
 
 	GLfloat r = GLfloat(1.0) / s;
 	return *this *= r;
@@ -569,10 +542,10 @@ mat4 matrixCompMult( const mat4& A, const mat4& B ) {
 
 inline
 mat4 transpose( const mat4& A ) {
-    return mat4( A[0][0], A[1][0], A[2][0], A[3][0],
-		 A[0][1], A[1][1], A[2][1], A[3][1],
-		 A[0][2], A[1][2], A[2][2], A[3][2],
-		 A[0][3], A[1][3], A[2][3], A[3][3] );
+    return mat4( A[0][0], A[0][1], A[0][2], A[0][3],
+		 A[1][0], A[1][1], A[1][2], A[1][3],
+		 A[2][0], A[2][1], A[2][2], A[2][3],
+		 A[3][0], A[3][1], A[3][2], A[3][3] );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -704,10 +677,10 @@ mat4 Ortho( const GLfloat left, const GLfloat right,
 	    const GLfloat zNear, const GLfloat zFar )
 {
     mat4 c;
-    c[0][0] = 2.0/(right - left);
-    c[1][1] = 2.0/(top - bottom);
-    c[2][2] = 2.0/(zNear - zFar);
-    c[3][3] = 1.0;
+    c[0][0] = 2.0f/(right - left);
+    c[1][1] = 2.0f/(top - bottom);
+    c[2][2] = 2.0f/(zNear - zFar);
+    c[3][3] = 1.0f;
     c[0][3] = -(right + left)/(right - left);
     c[1][3] = -(top + bottom)/(top - bottom);
     c[2][3] = -(zFar + zNear)/(zFar - zNear);
@@ -718,7 +691,7 @@ inline
 mat4 Ortho2D( const GLfloat left, const GLfloat right,
 	      const GLfloat bottom, const GLfloat top )
 {
-    return Ortho( left, right, bottom, top, -1.0, 1.0 );
+    return Ortho( left, right, bottom, top, -1.0f, 1.0f );
 }
 
 inline
@@ -727,14 +700,14 @@ mat4 Frustum( const GLfloat left, const GLfloat right,
 	      const GLfloat zNear, const GLfloat zFar )
 {
     mat4 c;
-    c[0][0] = 2.0*zNear/(right - left);
+    c[0][0] = 2.0f*zNear/(right - left);
     c[0][2] = (right + left)/(right - left);
-    c[1][1] = 2.0*zNear/(top - bottom);
+    c[1][1] = 2.0f*zNear/(top - bottom);
     c[1][2] = (top + bottom)/(top - bottom);
     c[2][2] = -(zFar + zNear)/(zFar - zNear);
-    c[2][3] = -2.0*zFar*zNear/(zFar - zNear);
-    c[3][2] = -1.0;
-    c[3][3] = 0.0;
+    c[2][3] = -2.0f*zFar*zNear/(zFar - zNear);
+    c[3][2] = -1.0f;
+	c[3][3] = 0.0f;
     return c;
 }
 
@@ -745,13 +718,12 @@ mat4 Perspective( const GLfloat fovy, const GLfloat aspect,
     GLfloat top   = tan(fovy*DegreesToRadians/2) * zNear;
     GLfloat right = top * aspect;
 
-    mat4 c;
+    mat4 c(0);
     c[0][0] = zNear/right;
     c[1][1] = zNear/top;
     c[2][2] = -(zFar + zNear)/(zFar - zNear);
-    c[2][3] = -2.0*zFar*zNear/(zFar - zNear);
-    c[3][2] = -1.0;
-    c[3][3] = 0.0;
+    c[2][3] = -2.0f*zFar*zNear/(zFar - zNear);
+    c[3][2] = -1.0f;
     return c;
 }
 
@@ -764,37 +736,13 @@ inline
 mat4 LookAt( const vec4& eye, const vec4& at, const vec4& up )
 {
     vec4 n = normalize(eye - at);
-    vec4 u = vec4(normalize(cross(up,n)), 0.0);
-    vec4 v = vec4(normalize(cross(n,u)), 0.0);
+	vec3 uu = normalize(cross(up, n));
+    vec4 u = vec4(uu.x, uu.y, uu.z, 0.0);
+    vec3 vv = normalize(cross(n,u));
+	vec4 v = vec4(vv.x, vv.y, vv.z, 0.0);
     vec4 t = vec4(0.0, 0.0, 0.0, 1.0);
     mat4 c = mat4(u, v, n, t);
     return c * Translate( -eye );
-}
-
-//----------------------------------------------------------------------------
-//
-// Generates a Normal Matrix
-//
-inline
-mat3 Normal( const mat4& c)
-{
-   mat3 d;
-   GLfloat det;
-
-   det = c[0][0]*c[1][1]*c[2][2]+c[0][1]*c[1][2]*c[2][1]+c[0][2]*c[1][0]*c[2][1]
-        -c[2][0]*c[1][1]*c[0][2]-c[1][0]*c[0][1]*c[2][2]-c[0][0]*c[1][2]*c[2][1];
-
-   d[0][0] = (c[1][1]*c[2][2]-c[1][2]*c[2][1])/det;
-   d[0][1] = -(c[1][0]*c[2][2]-c[1][2]*c[2][0])/det;
-   d[0][2] =  (c[1][0]*c[2][1]-c[1][1]*c[2][0])/det;
-   d[1][0] = -(c[0][1]*c[2][2]-c[0][2]*c[2][1])/det;
-   d[1][1] = (c[0][0]*c[2][2]-c[0][2]*c[2][0])/det;
-   d[1][2] = -(c[0][0]*c[2][1]-c[0][1]*c[2][0])/det;
-   d[2][0] =  (c[0][1]*c[1][2]-c[0][2]*c[1][1])/det;
-   d[2][1] = -(c[0][0]*c[1][2]-c[0][2]*c[1][0])/det;
-   d[2][2] = (c[0][0]*c[1][1]-c[1][0]*c[0][1])/det;
-
-  return d;
 }
 
 //----------------------------------------------------------------------------
@@ -810,15 +758,15 @@ inline
 void printv(const vec4& a )
 {
     Error( "replace with vector insertion operator" );
-    printf("%f %f %f %f \n\n", a[0], a[1], a[2], a[3]);
+    //printf("%f %f %f %f \n\n", a[0], a[1], a[2], a[3]);
 }
 
 inline
 void printm(const mat4 a)
 {
     Error( "replace with matrix insertion operator" );
-    for(int i=0; i<4; i++) printf("%f %f %f %f \n", a[i][0], a[i][1], a[i][2], a[i][3]);
-    printf("\n");
+    //for(int i=0; i<4; i++) printf("%f %f %f %f \n", a[i][0], a[i][1], a[i][2], a[i][3]);
+    //printf("\n");
 }
 
 inline

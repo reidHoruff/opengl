@@ -1,13 +1,10 @@
 /*
- * OpenGLSamples (openglsamples.sf.net) Examples
- * VC++ users should create a Win32 Console project and link
- * the program with glut32.lib, glu32.lib, opengl32.lib
- *
- * GLUT can be downloaded from http://www.xmission.com/~nate/glut.html
- * OpenGL is by default installed on your system.
- * For an installation of glut on windows for MS Visual Studio 2010 see: http://nafsadh.wordpress.com/2010/08/20/glut-in-ms-visual-studio-2010-msvs10/
- *
+ * Reid Horuff
+ * Final Project
+ * CS4395 - Dr. Perez
+ * 7-16-2015
  */
+
 
 #include <stdio.h>
 #include <math.h>
@@ -22,7 +19,7 @@ int seed = 0;
 float sv = 1.0;
 float vx = 3.0;
 float vy = 3.0;
-float fric = 0.95;
+float fric = 0.97;
 
 float angle1 = 34.0f;
 float angle2 = 34.0f;
@@ -80,17 +77,16 @@ static const GLfloat cubev[] = {
 };
 
 static float face_colors[] = {
-  0.8, 0.4, 0.2,
-  0.2, 7.0, 0.4,
-  0.2, 0.3, 1.0,
-  0.2, 0.2, 0.3,
-  0.1, 0.9, 0.9,
-  0.3, 0.9, 0.2
+  0.3, 0.3, 0.3,
+  0.4, 0.3, 0.3,
+  0.4, 0.4, 0.4,
+  0.3, 0.4, 0.3,
+  0.6, 0.5, 0.6,
+  0.3, 0.3, 0.3
 };
 
 void draw_square() {
 }
-
 
 void recur_cube(GLfloat x, GLfloat y, GLfloat z, float s, int depth) {
   int die = 0;
@@ -259,8 +255,12 @@ void idle() {
   angle1 += vx;
   angle2 += vy;
 
-  vx *= fric;
-  vy *= fric;
+  //min velocity of 0.2
+  if (fabs(vx) > 0.02)
+    vx *= fric;
+  if (fabs(vy) > 0.03)
+    vy *= fric;
+
   //inc_color(0.01);
   glutPostRedisplay();
 }
@@ -286,5 +286,6 @@ int main(int argc, char **argv) {
   glutKeyboardFunc(keyboard);
   initialize();
   glutMainLoop();
+
   return 0;
 }

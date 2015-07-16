@@ -1,4 +1,14 @@
 /*
+ * Reid Horuff
+ * Project 1
+ * CS4395 - Dr. Perez
+ * 7-16-2015
+ */
+
+
+
+
+/*
  * OpenGLSamples (openglsamples.sf.net) Examples
  * VC++ users should create a Win32 Console project and link
  * the program with glut32.lib, glu32.lib, opengl32.lib

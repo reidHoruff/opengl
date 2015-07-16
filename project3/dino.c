@@ -1,3 +1,13 @@
+/*
+ * Reid Horuff
+ * Project 3
+ * CS4395 - Dr. Perez
+ * 7-16-2015
+ */
+
+
+
+
 /* Copyright (c) Mark J. Kilgard, 1994, 1997.  */
 
 /* This program is freely distributable without licensing fees

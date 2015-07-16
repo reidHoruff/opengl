@@ -1,9 +1,19 @@
+
+/*
+ * Reid Horuff
+ * Project 2
+ * CS4395 - Dr. Perez
+ * 7-16-2015
+ */
+
+
+
 //  Display  a  rotating  color  cube
 //  In  this  version,  idle  function  increments  angles
 //  which  are  sent  to  vertex  shader  where  rotation  takes  place
 //
 #include <stdio.h>
-#include  "../lib/Angel.h"
+#include  "Angel/Angel.h"
 
 typedef  Angel::vec4  color4;
 typedef  Angel::vec4  point4;
@@ -73,7 +83,7 @@ void colorcube() {
 void init() {
   colorcube();
   //  Load  shaders  and  use  the  resulting  shader  program
-  GLuint program = InitShader("vshader36.glsl", "fshader36.glsl");
+  GLuint program = InitShader("shaders/vshader36.glsl", "shaders/fshader36.glsl");
   glUseProgram(  program  );
   //  Create  a  vertex  array  object
   GLuint  vao;

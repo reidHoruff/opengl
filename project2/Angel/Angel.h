@@ -10,10 +10,9 @@
 #define __ANGEL_H__
 
 //----------------------------------------------------------------------------
-//
+// 
 // --- Include system headers ---
 //
-
 #include <cmath>
 #include <iostream>
 
@@ -27,17 +26,20 @@
 // --- Include OpenGL header files and helpers ---
 //
 //   The location of these files vary by operating system.  We've included
-//     copies of open-soruce project headers in the "GL" directory local
+//     copies of open-source project headers in the "GL" directory local
 //     this this "include" directory.
 //
 
 #ifdef __APPLE__  // include Mac OS X verions of headers
-#  include <OpenGL/OpenGL.h>
-#  include <GLUT/glut.h>
+#include <GLEW/GLEW.h>
+#ifdef GLUT_3_2_CORE_PROFILE
+#include <OpenGL/gl3.h>
+#endif
+#include <GLUT/GLUT.h>
 #else // non-Mac OS X operating systems
-#  include <GL/glew.h>
-#  include <GL/freeglut.h>
-#  include <GL/freeglut_ext.h>
+#include <GL/glew.h>
+#include <GL/freeglut.h>
+#include <GL/freeglut_ext.h>
 #endif  // __APPLE__
 
 // Define a helpful macro for handling offsets into buffer objects
@@ -59,16 +61,16 @@ GLuint InitShader( const char* vertexShaderFile,
 //    DEBUG macro is defined.
 const GLfloat  DivideByZeroTolerance = GLfloat(1.0e-07);
 
-//  Degrees-to-radians constant
-const GLfloat  DegreesToRadians = M_PI / 180.0;
+//  Degrees-to-radians constant 
+const GLfloat  DegreesToRadians = GLfloat(M_PI) / 180.0f;
 
 }  // namespace Angel
 
 #include "vec.h"
 #include "mat.h"
-//#include "CheckError.h"
+#include "CheckError.h"
 
-// #define Print(x)  do { std::cerr << #x " = " << (x) << std::endl; } while(0)
+#define Print(x)  do { std::cerr << #x " = " << (x) << std::endl; } while(0)
 
 //  Globally use our namespace in our example programs.
 using namespace Angel;
